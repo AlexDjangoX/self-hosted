@@ -54,9 +54,9 @@ export default function Translation() {
       }
 
       const data = await response.json()
-      setTranslatedText(data.translation)
-      if (data.source && data.source !== sourceLang) {
-        setDetectedLang(data.source)
+      setTranslatedText(data.translatedText)
+      if (data.detectedLanguage && data.detectedLanguage !== sourceLang) {
+        setDetectedLang(data.detectedLanguage)
       }
     } catch (error) {
       console.error('Translation error:', error)
