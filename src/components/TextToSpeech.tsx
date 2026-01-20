@@ -23,13 +23,20 @@ export default function TextToSpeech() {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.voices && data.voices.length > 0) {
-          setVoices(data.voices)
-          // Don't set a default voice - let "Auto (based on language)" be the default
-          // This ensures the language dropdown actually controls the voice
+        // API returns array directly, not { voices: [...] }
+        if (Array.isArray(data) && data.length > 0) {
+          console.log(`Loaded ${data.length} voices from XTTS:`, data.slice(0, 5))
+          setVoices(data)
+          // Set default to first voice (Claribel Dervla)
+          setSelectedVoice(data[0])
         }
       })
-      .catch(err => console.error('Failed to fetch voices:', err))
+      .catch(err => {
+        console.error('Failed to fetch voices:', err)
+        // Set fallback voice
+        setVoices(['Claribel Dervla'])
+        setSelectedVoice('Claribel Dervla')
+      })
   }, [tokens])
 
   // Clear voice selection when language changes (so Auto takes effect)
